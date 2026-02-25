@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Is it leggings day?</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #0b1020;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+          Noto Sans, Helvetica Neue, Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      main {
+        text-align: center;
+        z-index: 2;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 9vw, 7rem);
+        line-height: 1.1;
+        letter-spacing: 0.02em;
+      }
+
+      #confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .piece {
+        position: absolute;
+        top: -20px;
+        width: 10px;
+        height: 14px;
+        opacity: 0.95;
+        animation: fall linear forwards;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-10vh) rotate(0deg);
+        }
+        100% {
+          transform: translateY(115vh) rotate(720deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="confetti" aria-hidden="true"></div>
+    <main>
+      <h1 id="answer">No, check tomorrow</h1>
+    </main>
+
+    <script>
+      const answer = document.getElementById('answer')
+      const confettiContainer = document.getElementById('confetti')
+      const isFriday = new Date().getDay() === 5
+
+      if (isFriday) {
+        answer.textContent = 'Yes'
+
+        const colors = ['#f43f5e', '#22c55e', '#38bdf8', '#facc15', '#a78bfa']
+
+        const spawnPiece = () => {
+          const piece = document.createElement('span')
+          piece.className = 'piece'
+
+          const left = Math.random() * 100
+          const duration = 2.8 + Math.random() * 2.5
+          const delay = Math.random() * 0.8
+          const size = 6 + Math.random() * 8
+          const color = colors[Math.floor(Math.random() * colors.length)]
+
+          piece.style.left = `${left}vw`
+          piece.style.backgroundColor = color
+          piece.style.width = `${size}px`
+          piece.style.height = `${size * 1.4}px`
+          piece.style.animationDuration = `${duration}s`
+          piece.style.animationDelay = `${delay}s`
+
+          confettiContainer.appendChild(piece)
+          piece.addEventListener('animationend', () => piece.remove())
+        }
+
+        for (let i = 0; i < 120; i += 1) {
+          setTimeout(spawnPiece, i * 25)
+        }
+
+        setInterval(() => {
+          for (let i = 0; i < 10; i += 1) {
+            spawnPiece()
+          }
+        }, 1200)
+      }
+    </script>
+  </body>
+</html>
