@@ -70,8 +70,40 @@
       const confettiContainer = document.getElementById('confetti')
       const isFriday = new Date().getDay() === 5
 
+      const messages = {
+        en: {
+          yes: 'Yes',
+          no: 'No, check tomorrow',
+        },
+        da: {
+          yes: 'Ja',
+          no: 'Nej, tjek i morgen',
+        },
+        es: {
+          yes: 'Sí',
+          no: 'No, revisa mañana',
+        },
+      }
+
+      const browserLanguages = [
+        ...(navigator.languages || []),
+        navigator.language,
+        'en',
+      ]
+      const supportedLanguage = browserLanguages
+        .filter(Boolean)
+        .map((language) => language.toLowerCase().slice(0, 2))
+        .find((language) => Object.hasOwn(messages, language))
+
+      const selectedLanguage = supportedLanguage || 'en'
+      const selectedMessages = messages[selectedLanguage]
+
+      document.documentElement.lang = selectedLanguage
+
+      answer.textContent = selectedMessages.no
+
       if (isFriday) {
-        answer.textContent = 'Yes'
+        answer.textContent = selectedMessages.yes
 
         const colors = ['#f43f5e', '#22c55e', '#38bdf8', '#facc15', '#a78bfa']
 
